@@ -3,10 +3,14 @@ import AbstactModel from "./AbstractModel";
 
 @Entity()
 class TimeStampModel extends AbstactModel {
-  @Column()
+  @Column({
+    type: "timestamp",
+  })
   created_at: string;
 
-  @Column()
+  @Column({
+    type: "timestamp",
+  })
   updated_at: string;
 }
 
