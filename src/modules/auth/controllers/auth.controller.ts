@@ -17,13 +17,17 @@ class AuthController {
     try {
       const { username, password } = req.body;
 
-      const user = await this?.authService.getTokenViaPasswordGrant();
+      const user = await this?.authService.getTokenViaPasswordGrant(
+        username,
+        password
+      );
 
-      console.log(user);
+      if (user === null) {
+        return new ErrorResponse(undefined, "Wrong credentials").send(res);
+      }
 
       return new SuccessResponse(user, "User retrived succesfuly").send(res);
     } catch (error) {
-      console.log("err", error);
       return new ErrorResponse().send(res);
     }
   }
@@ -31,7 +35,9 @@ class AuthController {
   /**
    * register
    */
-  public static register() {}
+  public async register(req: Request, res: Response) {
+    return new SuccessResponse(undefined, "hello").send(res);
+  }
 
   /**
    * logout

@@ -1,26 +1,36 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Unique, Index } from "typeorm";
+import bcrypt from "bcrypt";
 import TimeStampModel from "../../../core/model/TimeStampModel";
 
 @Entity()
+@Unique(["email"])
+@Unique(["username"])
 export class User extends TimeStampModel {
-  @PrimaryColumn()
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
-  username: string;
+  @Column({ type: "varchar", length: 255, nullable: true, unique: true })
+  @Index()
+  username: string | null;
 
-  @Column()
+  @Column({ type: "varchar", length: 255, nullable: true })
+  private password: string | null;
+
+  @Column({ type: "varchar", length: 255, unique: true })
   email: string;
 
-  @Column()
-  phone: string;
+  @Column({ type: "varchar", length: 50, nullable: true })
+  provider: string | null;
 
-  @Column()
-  role: string;
+  @Column({ type: "varchar", length: 255, nullable: true })
+  socialId: string | null;
 
-  @Column()
-  created_at: string;
+  async setPassword(password: string): Promise<void> {
+    const salt = await bcrypt.genSalt();
+    this.password = await bcrypt.hash(password, salt);
+  }
 
-  @Column()
-  type: string;
+  async validatePassword(password: string): Promise<boolean> {
+    return bcrypt.compare(password, this.password || "");
+  }
 }
