@@ -1,12 +1,17 @@
-import { AppDataSource } from "../../../integrations/database";
-import { User } from "../../user/models/user.entity";
+import UserRepository from "../../user/repositories/user.repository";
 
 class AuthService {
+  private userRepo: UserRepository;
+
+  constructor() {
+    this.userRepo = new UserRepository();
+  }
+
   /**
    * getTokenViaPasswordGrant
    */
   public async getTokenViaPasswordGrant(username: string, password: string) {
-    const user = await AppDataSource.getRepository(User).findOne({
+    const user = await this.userRepo.findOne({
       where: { username: username },
     });
 
@@ -19,6 +24,11 @@ class AuthService {
       token: user.email,
     };
   }
+
+  /**
+   * registerUser
+   */
+  public async registerUser(data: Record<string, unknown>) {}
 }
 
 export default AuthService;

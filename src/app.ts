@@ -3,6 +3,9 @@ import express, { Express } from "express";
 import setupRoutes from "./flow/routes";
 import bodyParser from "body-parser";
 import { AppDataSource } from "./integrations/database";
+import Container from "typedi";
+import { DataSource } from "typeorm";
+
 class App {
   public express: Express;
 
@@ -23,7 +26,9 @@ class App {
 
   private initializeDatabase(): void {
     AppDataSource.initialize()
-      .then(() => console.log("db connected"))
+      .then((dataSource) => {
+        Container.set(DataSource, dataSource);
+      })
       .catch((err) => console.error("db connection error", err));
   }
 }

@@ -6,9 +6,6 @@ import TimeStampModel from "../../../core/model/TimeStampModel";
 @Unique(["email"])
 @Unique(["username"])
 export class User extends TimeStampModel {
-  @PrimaryGeneratedColumn()
-  id: number;
-
   @Column({ type: "varchar", length: 255, nullable: true, unique: true })
   @Index()
   username: string | null;
