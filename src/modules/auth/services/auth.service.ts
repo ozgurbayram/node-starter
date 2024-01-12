@@ -11,9 +11,7 @@ class AuthService {
    * getTokenViaPasswordGrant
    */
   public async getTokenViaPasswordGrant(username: string, password: string) {
-    const user = await this.userRepo.findOne({
-      where: { username: username },
-    });
+    const user = (await this.userRepo.getRegularUsers()).at(0);
 
     if (!user?.validatePassword(password)) {
       return null;
