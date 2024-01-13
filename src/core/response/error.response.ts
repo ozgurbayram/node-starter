@@ -13,7 +13,7 @@ class ErrorResponse extends AbstractResponse {
     this.data = data;
   }
 
-  send(res: Response<any, Record<string, any>>): void {
+  send(res: Response): void {
     res.status(this.statusCode).json({
       message: this.message,
       status: this.statusCode,

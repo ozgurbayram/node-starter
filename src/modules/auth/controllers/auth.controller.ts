@@ -2,12 +2,15 @@ import { Request, Response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import ErrorResponse from "../../../core/response/error.response";
+import UserService from "../../user/services/user.service";
 
 class AuthController {
   private authService: AuthService;
+  private userService: UserService;
 
   constructor() {
     this.authService = new AuthService();
+    this.userService = new UserService();
   }
 
   /**
@@ -26,7 +29,9 @@ class AuthController {
         return new ErrorResponse(undefined, "Wrong credentials").send(res);
       }
 
-      return new SuccessResponse(user, "User retrived succesfuly").send(res);
+      return new SuccessResponse({ user }, "User retrived succesfuly").send(
+        res
+      );
     } catch (error) {
       return new ErrorResponse().send(res);
     }
@@ -36,7 +41,15 @@ class AuthController {
    * register
    */
   public async register(req: Request, res: Response) {
-    return new SuccessResponse(undefined, "hello").send(res);
+    const { email, password, username } = req.body;
+
+    const user = await this.userService.createUser({
+      email,
+      password,
+      username,
+    });
+
+    return new SuccessResponse({ user }, "hello").send(res);
   }
 
   /**

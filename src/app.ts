@@ -26,9 +26,7 @@ class App {
 
   private initializeDatabase(): void {
     AppDataSource.initialize()
-      .then((dataSource) => {
-        Container.set(DataSource, dataSource);
-      })
+      .then(() => {})
       .catch((err) => console.error("db connection error", err));
   }
 }
