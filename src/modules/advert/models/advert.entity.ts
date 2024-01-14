@@ -5,7 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import TimeStampModel from "../../../core/model/TimeStampModel";
+import TimeStampModel from "../../../core/model/timestamp.model";
 import { User } from "../../user/models/user.entity";
 
 @Entity()

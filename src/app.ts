@@ -3,7 +3,7 @@ import express, { Express } from "express";
 import setupRoutes from "./flow/routes";
 import bodyParser from "body-parser";
 import { AppDataSource } from "./integrations/database";
-import { errorHandler } from "./core/middlewares/errorHandler.middleware";
+import { errorHandler } from "./core/middlewares/error-handler.middleware";
 
 class App {
   public express: Express;
