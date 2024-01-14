@@ -2,7 +2,7 @@ import { isEmpty } from "lodash";
 import UserRepository from "../../user/repositories/user.repository";
 import UserNotFoundException from "../exceptions/userNotFound.exception";
 import AbstractException from "../../../core/exception/abstract.exception";
-
+import LocalStrategy from "passport-local";
 class AuthService {
   private userRepo: UserRepository;
 
@@ -13,7 +13,7 @@ class AuthService {
   /**
    * getTokenViaPasswordGrant
    */
-  public async getTokenViaPasswordGrant(email: string, password: string) {
+  public async loginUser(email: string, password: string) {
     const user = await this.userRepo.findOne({ where: { email } });
 
     if (isEmpty(user)) {

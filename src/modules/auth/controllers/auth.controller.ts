@@ -19,10 +19,7 @@ class AuthController {
   public async login(req: Request, res: Response, next: NextFunction) {
     const { email, password } = req.body;
 
-    const user = await this?.authService.getTokenViaPasswordGrant(
-      email,
-      password
-    );
+    const user = await this?.authService.loginUser(email, password);
 
     return new SuccessResponse({ user }, "User retrived succesfuly").send(res);
   }
