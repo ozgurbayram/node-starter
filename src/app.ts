@@ -3,8 +3,7 @@ import express, { Express } from "express";
 import setupRoutes from "./flow/routes";
 import bodyParser from "body-parser";
 import { AppDataSource } from "./integrations/database";
-import Container from "typedi";
-import { DataSource } from "typeorm";
+import { errorHandler } from "./core/middlewares/errorHandler.middleware";
 
 class App {
   public express: Express;
@@ -22,6 +21,7 @@ class App {
 
   private initializeRoutes(): void {
     setupRoutes(this.express);
+    this.express.use(errorHandler);
   }
 
   private initializeDatabase(): void {

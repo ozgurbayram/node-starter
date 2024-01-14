@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, Index } from "typeorm";
+import { Entity, Column, Unique, Index } from "typeorm";
 import bcrypt from "bcrypt";
 import TimeStampModel from "../../../core/model/TimeStampModel";
 

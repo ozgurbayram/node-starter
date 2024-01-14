@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import ErrorResponse from "../../../core/response/error.response";
@@ -16,25 +16,15 @@ class AuthController {
   /**
    * login
    */
-  public async login(req: Request, res: Response) {
-    try {
-      const { username, password } = req.body;
+  public async login(req: Request, res: Response, next: NextFunction) {
+    const { email, password } = req.body;
 
-      const user = await this?.authService.getTokenViaPasswordGrant(
-        username,
-        password
-      );
+    const user = await this?.authService.getTokenViaPasswordGrant(
+      email,
+      password
+    );
 
-      if (user === null) {
-        return new ErrorResponse(undefined, "Wrong credentials").send(res);
-      }
-
-      return new SuccessResponse({ user }, "User retrived succesfuly").send(
-        res
-      );
-    } catch (error) {
-      return new ErrorResponse().send(res);
-    }
+    return new SuccessResponse({ user }, "User retrived succesfuly").send(res);
   }
 
   /**

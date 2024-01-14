@@ -1,4 +1,3 @@
-// middleware/validateRequest.js
 import { NextFunction, Request, Response } from "express";
 import Joi, { Schema } from "joi";
 import ErrorResponse from "../response/error.response";

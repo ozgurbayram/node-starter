@@ -9,7 +9,7 @@ export function routeHandler(
 ) {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      controllerMethod(req, res, next);
+      await controllerMethod(req, res, next);
     } catch (error) {
       next(error);
     }
