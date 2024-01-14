@@ -1,3 +1,4 @@
+import AbstractException from "../../../core/exception/abstract.exception";
 import { User } from "../models/user.entity";
 import UserRepository from "../repositories/user.repository";
 import { ICreateUser } from "./user.service.interface";
@@ -12,29 +13,27 @@ class UserService {
   /**
    * createUser
    */
-  public async createUser({ email, password, username }: ICreateUser) {
-    try {
-      const isExist = await this.userRepo.findOne({
-        where: { email: email },
-      });
+  public async createUser({ email, password, password_confirm }: ICreateUser) {
+    const isExist = await this.userRepo.findOne({
+      where: { email: email },
+    });
 
-      if (isExist) {
-        return;
-      }
-
-      if (isExist === null) {
-        const user = new User();
-
-        (user.username = username), (user.email = email);
-
-        await user.setPassword(password);
-
-        this.userRepo.save(user);
-        return user;
-      }
-    } catch (error) {
-      return error;
+    if (isExist) {
+      throw new AbstractException("User already exist", 400);
     }
+
+    if (password !== password_confirm) {
+      throw new AbstractException("Password Mismatch", 400);
+    }
+
+    const user = new User();
+
+    user.email = email;
+
+    await user.setPassword(password);
+
+    await this.userRepo.save(user);
+    return user;
   }
 }
 

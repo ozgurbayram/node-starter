@@ -31,12 +31,12 @@ class AuthController {
    * register
    */
   public async register(req: Request, res: Response) {
-    const { email, password, username } = req.body;
+    const { email, password, password_confirm } = req.body;
 
     const user = await this.userService.createUser({
       email,
       password,
-      username,
+      password_confirm,
     });
 
     return new SuccessResponse({ user }, "hello").send(res);
