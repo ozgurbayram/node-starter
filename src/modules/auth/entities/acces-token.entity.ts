@@ -7,12 +7,12 @@ import {
   ManyToOne,
   Unique,
 } from "typeorm";
-import AbstactModel from "../../../core/model/abstract.model";
+import AbstractModel from "../../../core/model/abstract.model";
 import { User } from "../../user/entities/user.entity";
 
 @Entity()
 @Unique(["user_id", "token"])
-export class AccessToken extends AbstactModel {
+export class AccessToken extends AbstractModel {
   @Column({ type: "varchar" })
   @Index()
   token: string;
@@ -30,5 +30,5 @@ export class AccessToken extends AbstactModel {
   @JoinColumn({
     name: "user_id",
   })
-  user_id: number;
+  user: User;
 }

@@ -3,14 +3,17 @@ import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import UserService from "../../user/services/user.service";
 import { ICreateUser } from "../../user/services/user.service.interface";
+import TokenService from "../services/token.service";
 
 class AuthController {
   private authService: AuthService;
   private userService: UserService;
+  private tokenService: TokenService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
+    this.tokenService = new TokenService();
   }
 
   /**
@@ -39,6 +42,14 @@ class AuthController {
     });
 
     return new SuccessResponse({ user }, "Register Success").send(res);
+  }
+
+  public async refreshToken(req: Request, res: Response) {
+    const { refresh_token } = req.body;
+
+    const data = await this.tokenService.refreshToken(refresh_token);
+
+    return new SuccessResponse({ data }, "Refresh token sucecss").send(res);
   }
 
   /**
