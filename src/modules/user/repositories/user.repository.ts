@@ -1,5 +1,5 @@
 import { Repository } from "typeorm";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import { AppDataSource } from "../../../integrations/database";
 
 class UserRepository extends Repository<User> {

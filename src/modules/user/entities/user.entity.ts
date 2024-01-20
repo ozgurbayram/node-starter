@@ -20,7 +20,7 @@ export class User extends TimeStampModel {
   provider: string | null;
 
   @Column({ type: "varchar", length: 255, nullable: true })
-  socialId: string | null;
+  social_id: string | null;
 
   async setPassword(password: string): Promise<void> {
     const salt = await bcrypt.genSalt();

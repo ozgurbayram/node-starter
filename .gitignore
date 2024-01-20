@@ -47,3 +47,8 @@ yarn-error.log*
 # dotenv environment variable files
 .env.*
 !.env.example
+
+
+package-lock.json
+yarn.lock
+notes.txt

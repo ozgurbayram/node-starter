@@ -6,7 +6,7 @@ const entitiesPath = path.join(
   "..",
   "modules",
   "**",
-  "models",
+  "entities",
   "*.entity{.ts,.js}"
 );
 

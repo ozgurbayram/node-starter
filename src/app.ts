@@ -1,4 +1,5 @@
 import "reflect-metadata";
+import "dotenv/config";
 import express, { Express } from "express";
 import setupRoutes from "./flow/routes";
 import bodyParser from "body-parser";

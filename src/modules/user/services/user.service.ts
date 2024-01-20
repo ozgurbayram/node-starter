@@ -1,6 +1,7 @@
 import AbstractException from "../../../core/exception/abstract.exception";
-import { User } from "../models/user.entity";
+import { User } from "../entities/user.entity";
 import UserRepository from "../repositories/user.repository";
+import { UserProvider } from "../user.enums";
 import { ICreateUser } from "./user.service.interface";
 
 class UserService {
@@ -13,7 +14,12 @@ class UserService {
   /**
    * createUser
    */
-  public async createUser({ email, password, password_confirm }: ICreateUser) {
+  public async createUser({
+    email,
+    username,
+    password,
+    password_confirm,
+  }: ICreateUser) {
     const isExist = await this.userRepo.findOne({
       where: { email: email },
     });
@@ -29,10 +35,13 @@ class UserService {
     const user = new User();
 
     user.email = email;
+    user.username = username ? username : null;
+    user.provider = UserProvider.REGULAR;
 
     await user.setPassword(password);
 
     await this.userRepo.save(user);
+
     return user;
   }
 }

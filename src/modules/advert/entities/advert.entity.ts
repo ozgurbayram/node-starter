@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from "typeorm";
 import TimeStampModel from "../../../core/model/timestamp.model";
-import { User } from "../../user/models/user.entity";
+import { User } from "../../user/entities/user.entity";
 
 @Entity()
 export class Advert extends TimeStampModel {
