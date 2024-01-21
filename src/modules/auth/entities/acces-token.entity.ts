@@ -9,9 +9,10 @@ import {
 } from "typeorm";
 import AbstractModel from "../../../core/model/abstract.model";
 import { User } from "../../user/entities/user.entity";
+import { AuthScope } from "../auth.enum";
 
 @Entity()
-@Unique(["user_id", "token"])
+@Unique(["user", "token"])
 export class AccessToken extends AbstractModel {
   @Column({ type: "varchar" })
   @Index()
@@ -31,4 +32,10 @@ export class AccessToken extends AbstractModel {
     name: "user_id",
   })
   user: User;
+
+  @Column({
+    type: "simple-array",
+    default: [AuthScope.BASIC, AuthScope.REGULAR],
+  })
+  scopes: Array<string>;
 }

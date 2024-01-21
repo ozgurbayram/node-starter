@@ -9,7 +9,7 @@ class AbstractException extends Error {
     super(message);
     this.status = status;
     this.name = this.constructor.name;
-    this.message = description;
+    this.message = message || description;
   }
 }
 

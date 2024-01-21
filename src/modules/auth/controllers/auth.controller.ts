@@ -55,8 +55,8 @@ class AuthController {
   /**
    * logout
    */
-  public logout() {
-    console.log("logout worked");
+  public logout(req: Request, res: Response) {
+    req.headers.authorization;
   }
 }
 

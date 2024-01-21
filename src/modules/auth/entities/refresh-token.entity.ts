@@ -11,7 +11,7 @@ import AbstractModel from "../../../core/model/abstract.model";
 import { AccessToken } from "./acces-token.entity";
 
 @Entity()
-@Unique(["token", "access_token_id"])
+@Unique(["token", "access_token"])
 export class RefreshToken extends AbstractModel {
   @Column({ type: "varchar" })
   @Index()
@@ -21,7 +21,7 @@ export class RefreshToken extends AbstractModel {
   @JoinColumn({
     name: "access_token_id",
   })
-  accessToken: AccessToken; // This should be an entity reference, not a number
+  access_token: AccessToken;
 
   @CreateDateColumn()
   private created_at: string;

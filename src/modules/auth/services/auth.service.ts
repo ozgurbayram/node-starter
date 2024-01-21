@@ -11,6 +11,7 @@ class AuthService {
 
   constructor() {
     this.userRepo = new UserRepository();
+    this.tokenService = new TokenService();
   }
 
   public async loginUser(email: string, password: string) {
@@ -20,7 +21,7 @@ class AuthService {
       throw new UserNotFoundException();
     }
 
-    const isPasswordCorrect = await user?.validatePassword(password);
+    const isPasswordCorrect = await user.validatePassword(password);
 
     if (!isPasswordCorrect) {
       throw new AbstractException("Password is incorrect", 400);
@@ -29,7 +30,7 @@ class AuthService {
     await this.tokenService.revokeUserTokens(user);
 
     const { access_token, refresh_token } =
-      await this.tokenService.generateUserTokens(user);
+      await this.tokenService?.generateUserTokens(user);
 
     return {
       access_token,

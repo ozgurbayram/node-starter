@@ -1,4 +1,4 @@
-import { isEmpty } from "lodash";
+import { isEmpty, isNil } from "lodash";
 import { User } from "../../user/entities/user.entity";
 import AccessTokenRepository from "../repositories/access-token.repository";
 import RefreshTokenRepository from "../repositories/refresh-token.repository";
@@ -100,7 +100,7 @@ class TokenService {
       throw new AbstractException("Token Error");
     }
 
-    refreshToken.accessToken = accessToken;
+    refreshToken.access_token = accessToken;
 
     const token = await this.refreshTokenRepository.save(refreshToken);
 
@@ -117,14 +117,17 @@ class TokenService {
 
     const refreshToken = await this.refreshTokenRepository.findOne({
       where: { token: token, revoked: false },
-      relations: ["accessToken", "accessToken.user"],
+      relations: ["access_token", "access_token.user"],
     });
 
     if (!refreshToken) {
       throw new AbstractException("Invalid refresh token", 401);
     }
 
-    const accessToken = refreshToken.accessToken;
+    const accessToken = refreshToken.access_token;
+
+    accessToken.revoked = true;
+    await this.accessTokenRepository.save(accessToken);
 
     if (!accessToken) {
       throw new AbstractException("Access token not found", 401);
@@ -144,6 +147,20 @@ class TokenService {
       access_token,
       refresh_token,
     };
+  }
+
+  public async revokeToken(token: string) {
+    const accessToken = await this.accessTokenRepository.findOne({
+      where: { token, revoked: false },
+    });
+
+    if (isNil(accessToken)) {
+      throw new AbstractException("Token not found", 400);
+    }
+
+    accessToken.revoked = true;
+
+    await this.accessTokenRepository.save(accessToken);
   }
 }
 
