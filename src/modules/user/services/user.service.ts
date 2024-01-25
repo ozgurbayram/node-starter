@@ -3,7 +3,6 @@ import { User } from "../entities/user.entity";
 import UserRepository from "../repositories/user.repository";
 import { UserProvider } from "../user.enums";
 import { ICreateUser } from "./user.service.interface";
-
 class UserService {
   private userRepo: UserRepository;
 
@@ -43,6 +42,13 @@ class UserService {
     await this.userRepo.save(user);
 
     return user;
+  }
+
+  /**
+   * getAllUsers
+   */
+  public async getAllUsers() {
+    return this.userRepo.getRegularUsers();
   }
 }
 

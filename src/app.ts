@@ -1,28 +1,53 @@
 import "reflect-metadata";
 import "dotenv/config";
-import express, { Express } from "express";
-import setupRoutes from "./flow/routes";
+import { Express } from "express";
 import bodyParser from "body-parser";
 import { AppDataSource } from "./integrations/database";
 import { errorHandler } from "./core/middlewares/error-handler.middleware";
+import AuthService from "./modules/auth/services/auth.service";
+import { initPassport } from "./modules/auth/passport.config";
+import passport from "passport";
+import { createExpressServer } from "routing-controllers";
+import path from "path";
+
+const controllersPath = path.join(
+  __dirname,
+  "modules",
+  "**",
+  "controllers",
+  "*.controller{.ts,.js}"
+);
+
+console.log(controllersPath);
 
 class App {
   public express: Express;
 
+  private authService: AuthService;
+
   constructor() {
-    this.express = express();
+    this.express = createExpressServer({
+      controllers: [controllersPath],
+      routePrefix: "/api",
+    });
+
     this.initializeDatabase();
+
     this.initializeMiddlewares();
-    this.initializeRoutes();
+
+    this.authService = new AuthService();
+
+    this.initializePassport();
   }
 
   private initializeMiddlewares(): void {
     this.express.use(bodyParser.json());
+    this.express.use(errorHandler);
   }
 
-  private initializeRoutes(): void {
-    setupRoutes(this.express);
-    this.express.use(errorHandler);
+  private initializePassport() {
+    this.express.use(passport.initialize());
+    initPassport(this.authService);
   }
 
   private initializeDatabase(): void {

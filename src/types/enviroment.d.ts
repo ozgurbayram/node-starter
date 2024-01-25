@@ -10,6 +10,9 @@ declare global {
       DB_NAME: string;
       DB_DATABASE: string;
       ACCESS_TOKEN_SECRET: string;
+      OAUTH_SERVER_URL: string;
+      OAUTH_CLIENT_ID: string;
+      OAUTH_CLIENT_SECRET: string;
     }
   }
 }

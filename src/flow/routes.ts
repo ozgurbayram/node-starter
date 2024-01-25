@@ -1,8 +1,8 @@
 import { Express } from "express";
-import authRoutes from "../modules/auth/auth.routes";
+import apiRouter from "../api/api.routes";
 
 const setupRoutes = (app: Express) => {
-  app.use("/api/auth", authRoutes);
+  app.use("/api", apiRouter);
 };
 
 export default setupRoutes;

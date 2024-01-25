@@ -16,7 +16,7 @@ export class User extends TimeStampModel {
   @Column({ type: "varchar", length: 255, unique: true })
   email: string;
 
-  @Column({ type: "varchar", length: 50, nullable: true })
+  @Column({ type: "varchar", length: 50, nullable: true, default: "regular" })
   provider: string | null;
 
   @Column({ type: "varchar", length: 255, nullable: true })
