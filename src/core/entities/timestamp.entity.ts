@@ -1,8 +1,8 @@
 import { Column, Entity, CreateDateColumn, UpdateDateColumn } from "typeorm";
-import AbstactModel from "./abstract.model";
+import AbstactEntity from "./abstract.entity";
 
 @Entity()
-class TimeStampModel extends AbstactModel {
+class TimeStampEntity extends AbstactEntity {
   @CreateDateColumn()
   created_at: string;
 
@@ -10,4 +10,4 @@ class TimeStampModel extends AbstactModel {
   updated_at: string;
 }
 
-export default TimeStampModel;
+export default TimeStampEntity;

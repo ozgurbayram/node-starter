@@ -1,6 +1,6 @@
 import { Entity, Column, Unique, Index } from "typeorm";
 import bcrypt from "bcrypt";
-import TimeStampModel from "../../../core/model/timestamp.model";
+import TimeStampModel from "../../../core/entities/timestamp.entity";
 
 @Entity()
 @Unique(["email"])

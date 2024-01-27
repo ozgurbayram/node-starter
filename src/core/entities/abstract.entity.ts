@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
-class AbstactModel {
+class AbstractEntity {
   @PrimaryGeneratedColumn({})
   id: number;
 }
 
-export default AbstactModel;
+export default AbstractEntity;
