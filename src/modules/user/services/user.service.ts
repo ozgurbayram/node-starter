@@ -1,8 +1,8 @@
 import AbstractException from "../../../core/exception/abstract.exception";
+import { RegisterRequest } from "../../auth/dtos/auth.dto";
 import { User } from "../entities/user.entity";
 import UserRepository from "../repositories/user.repository";
 import { UserProvider } from "../user.enums";
-import { ICreateUser } from "./user.service.interface";
 class UserService {
   private userRepo: UserRepository;
 
@@ -18,7 +18,7 @@ class UserService {
     username,
     password,
     password_confirm,
-  }: ICreateUser) {
+  }: RegisterRequest) {
     const isExist = await this.userRepo.findOne({
       where: { email: email },
     });
@@ -36,6 +36,7 @@ class UserService {
     user.email = email;
     user.username = username ? username : null;
     user.provider = UserProvider.REGULAR;
+    user.avatar_url = `https://api.dicebear.com/7.x/pixel-art/svg?seed=${username}`;
 
     await user.setPassword(password);
 

@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { Middleware } from "routing-controllers";
 
 export function isAuthenticated(
   req: Request,

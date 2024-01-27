@@ -2,7 +2,6 @@ import { NextFunction, Request, Response, response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import UserService from "../../user/services/user.service";
-import { ICreateUser } from "../../user/services/user.service.interface";
 import {
   Body,
   Controller,

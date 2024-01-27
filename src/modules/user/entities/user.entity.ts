@@ -22,6 +22,9 @@ export class User extends TimeStampModel {
   @Column({ type: "varchar", length: 255, nullable: true })
   social_id: string | null;
 
+  @Column({ type: "varchar", length: 255, nullable: true })
+  avatar_url: string | null;
+
   async setPassword(password: string): Promise<void> {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(password, salt);
