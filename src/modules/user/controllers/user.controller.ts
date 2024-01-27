@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import UserService from "../services/user.service";
 import { Get, JsonController, UseBefore } from "routing-controllers";
-import { isAuthenticated } from "../../../core/middlewares/authentication.middleware";
+import { IsAuthenticated } from "../../../core/middlewares/authentication.middleware";
 
 @JsonController("/user")
-@UseBefore(isAuthenticated)
+@UseBefore(IsAuthenticated)
 class UserController {
   private userService: UserService;
 
