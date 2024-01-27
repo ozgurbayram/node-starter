@@ -1,15 +1,19 @@
-import { NextFunction, Request, Response } from "express";
+import {
+  Middleware,
+  ExpressErrorMiddlewareInterface,
+} from "routing-controllers";
+import { Request, Response, NextFunction } from "express";
 
-export const errorHandler = (
-  err: {
-    status?: number;
-    message: string;
-  },
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const status = err.status || 500;
-  const message = err.message;
-  res.status(status).json({ error: message, status: status }).send();
-};
+@Middleware({ type: "after" })
+export class ErrorHandler implements ExpressErrorMiddlewareInterface {
+  error(error: any, req: Request, res: Response, next: NextFunction): void {
+    const status = error.httpCode || 500;
+    const message = error.message || "Internal Server Error";
+
+    res.status(status).json({
+      status,
+      message,
+      ...error,
+    });
+  }
+}

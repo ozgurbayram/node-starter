@@ -4,10 +4,10 @@ import AbstractException from "../../../core/exception/abstract.exception";
 import UserRepository from "../../user/repositories/user.repository";
 import TokenService from "./token.service";
 import { NextFunction, Request, Response } from "express";
-import passport from "passport";
+import passport, { use } from "passport";
 import SuccessResponse from "../../../core/response/success.response";
 import { User } from "../../user/entities/user.entity";
-import { Req, Res } from "routing-controllers";
+import { Body, Req, Res } from "routing-controllers";
 
 class AuthService {
   private userRepo: UserRepository;
@@ -34,30 +34,38 @@ class AuthService {
     return user;
   }
 
-  public async authenticateUser(
-    @Req() req: Request,
-    @Res() res: Response,
-    next: NextFunction
-  ) {
-    passport.authenticate(
-      "local",
-      (err: Error, user: User, info: { message: string }) => {
-        if (err) {
-          return next(err);
+  public async authenticateUser(body: {
+    email: string;
+    password: string;
+  }): Promise<{ user: User | null; info?: { message: string } }> {
+    return new Promise((resolve, reject) => {
+      passport.authenticate(
+        "local",
+        (err: Error, user: User, info: { message: string }) => {
+          if (err) {
+            reject(err);
+          } else if (!user) {
+            resolve({ user: null, info });
+          } else {
+            resolve({ user });
+          }
         }
+      )({ body: body } as Request, {} as Response, () => {});
+    });
+  }
 
-        if (!user) {
-          return res.status(400).json(info);
-        }
+  /**
+   * loginViaPasswordGrant
+   */
+  public async loginViaPasswordGrant(email: string, password: string) {
+    const { user } = await this.authenticateUser({ email, password });
+    if (!user) {
+      return new AbstractException("Invalid credentials");
+    }
 
-        this.tokenService.generateUserTokens(user).then((token) => {
-          return new SuccessResponse(
-            { user, token },
-            "User retrived succesfuly"
-          ).send(res);
-        });
-      }
-    )(req, res, next);
+    const tokens = await this.tokenService.generateUserTokens(user);
+
+    return { user, tokens };
   }
 
   /**

@@ -1,53 +1,65 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response, response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import UserService from "../../user/services/user.service";
 import { ICreateUser } from "../../user/services/user.service.interface";
-import { Body, Controller, Get, Post, Req, Res } from "routing-controllers";
-import { validateOrReject } from "class-validator";
+import {
+  Body,
+  Controller,
+  Get,
+  JsonController,
+  NotFoundError,
+  Post,
+  Req,
+  Res,
+} from "routing-controllers";
+import { Validate, validateOrReject } from "class-validator";
+import TokenService from "../services/token.service";
+import { RegisterRequest } from "../dtos/auth.dto";
+import { use } from "passport";
 
-@Controller("/auth")
+@JsonController("/auth")
 class AuthController {
   private authService: AuthService;
   private userService: UserService;
+  private tokenService: TokenService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
+    this.tokenService = new TokenService();
   }
 
-  @Get("/login")
-  public async login(
-    @Req() req: Request,
-    @Res() res: Response,
-    next: NextFunction
-  ) {
-    return this.authService.authenticateUser(req, res, next);
+  @Post("/login")
+  async login(@Body() body: { email: string; password: string }) {
+    const { email, password } = body;
+
+    const data = await this.authService.loginViaPasswordGrant(email, password);
+
+    return new SuccessResponse({ data });
   }
 
   @Post("/register")
-  public async register(
-    @Req() req: Request,
-    @Res() res: Response,
-    next: NextFunction
-  ) {
-    console.log(req.body);
+  public async register(@Body({ validate: true }) body: RegisterRequest) {
+    const { email, password, username, password_confirm } = body;
 
-    const { email, password, username, password_confirm } =
-      req.body as ICreateUser;
-
-    await this.userService.createUser({
+    const user = await this.userService.createUser({
       email,
       password,
       password_confirm,
       username,
     });
 
-    return this.authService.authenticateUser(req, res, next);
+    const data = await this.authService.loginViaPasswordGrant(
+      user.email,
+      password
+    );
+
+    return new SuccessResponse({ data });
   }
 
   @Post("/refresh_token")
-  public async refreshToken(@Req() req: Request, @Res() res: Response) {
+  async refreshToken(@Req() req: Request, @Res() res: Response) {
     const { refresh_token } = req.body;
 
     const data = await this.authService.refreshToken(refresh_token);
@@ -56,14 +68,12 @@ class AuthController {
   }
 
   @Post("/logout")
-  public async logout(@Req() req: Request, @Res() res: Response) {
+  async logout(@Req() req: Request, @Res() res: Response) {
     return new SuccessResponse({}, "hello from logout").send(res);
   }
 
   @Post("/deneme")
   async deneme(@Body() body: { email: string }) {
-    console.log(body);
-
     return "Hello";
   }
 }
