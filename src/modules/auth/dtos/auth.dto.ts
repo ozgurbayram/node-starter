@@ -1,11 +1,4 @@
-import {
-  IsEmail,
-  IsNotEmpty,
-  IsString,
-  Length,
-  Min,
-  isEAN,
-} from "class-validator";
+import { IsEmail, IsNotEmpty, IsString, Length } from "class-validator";
 
 export class LoginRequest {
   @IsEmail()
@@ -26,10 +19,10 @@ export class RegisterRequest {
   username: string;
 
   @IsString()
-  @Length(8)
+  @Length(8, 100)
   password: string;
 
   @IsString()
-  @Length(8)
+  @Length(8, 100)
   password_confirm: string;
 }

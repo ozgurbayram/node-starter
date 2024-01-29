@@ -3,11 +3,9 @@ import UserNotFoundException from "../exceptions/userNotFound.exception";
 import AbstractException from "../../../core/exception/abstract.exception";
 import UserRepository from "../../user/repositories/user.repository";
 import TokenService from "./token.service";
-import { NextFunction, Request, Response } from "express";
-import passport, { use } from "passport";
-import SuccessResponse from "../../../core/response/success.response";
+import { Request, Response } from "express";
+import passport from "passport";
 import { User } from "../../user/entities/user.entity";
-import { Body, Req, Res } from "routing-controllers";
 
 class AuthService {
   private userRepo: UserRepository;
@@ -58,7 +56,7 @@ class AuthService {
    * loginViaPasswordGrant
    */
   public async loginViaPasswordGrant(email: string, password: string) {
-    const { user } = await this.authenticateUser({ email, password });
+    const { user } = await this.({ email, password });
     if (!user) {
       return new AbstractException("Invalid credentials");
     }

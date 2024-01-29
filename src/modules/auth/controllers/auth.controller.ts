@@ -1,32 +1,18 @@
-import { NextFunction, Request, Response, response } from "express";
+import { Request, Response } from "express";
 import SuccessResponse from "../../../core/response/success.response";
 import AuthService from "../services/auth.service";
 import UserService from "../../user/services/user.service";
-import {
-  Body,
-  Controller,
-  Get,
-  JsonController,
-  NotFoundError,
-  Post,
-  Req,
-  Res,
-} from "routing-controllers";
-import { Validate, validateOrReject } from "class-validator";
-import TokenService from "../services/token.service";
+import { Body, JsonController, Post, Req, Res } from "routing-controllers";
 import { RegisterRequest } from "../dtos/auth.dto";
-import { use } from "passport";
 
 @JsonController("/auth")
 class AuthController {
   private authService: AuthService;
   private userService: UserService;
-  private tokenService: TokenService;
 
   constructor() {
     this.authService = new AuthService();
     this.userService = new UserService();
-    this.tokenService = new TokenService();
   }
 
   @Post("/login")
