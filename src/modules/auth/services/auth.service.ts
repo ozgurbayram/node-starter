@@ -56,7 +56,7 @@ class AuthService {
    * loginViaPasswordGrant
    */
   public async loginViaPasswordGrant(email: string, password: string) {
-    const { user } = await this.({ email, password });
+    const { user } = await this.authenticateUser({ email, password });
     if (!user) {
       return new AbstractException("Invalid credentials");
     }
